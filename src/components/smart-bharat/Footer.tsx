@@ -1,16 +1,18 @@
+import { useState } from "react";
 import { Twitter, Github, Linkedin, Mail } from "lucide-react";
 import { ChakraIcon } from "./ChakraIcon";
+import { PrivacyModal } from "./PrivacyModal";
 
 const cols = [
   { title: "Product", links: ["Companion", "Report Issue", "Schemes", "Roadmap"] },
   { title: "Resources", links: ["Docs", "API", "Guides", "Support"] },
-  { title: "Contact", links: ["Partnerships", "Press", "Careers", "hello@smartbharat.in"] },
 ];
 
 export function Footer() {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   return (
     <footer className="border-t border-border/60 px-6 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-12">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-10">
         <div>
           <div className="flex items-center gap-2 mb-4">
             <ChakraIcon className="w-8 h-8 text-saffron" />
@@ -20,8 +22,13 @@ export function Footer() {
             An AI civic companion built to make government services accessible, transparent, and human — for every citizen of Bharat.
           </p>
           <div className="flex gap-3 mt-5">
-            {[Twitter, Github, Linkedin, Mail].map((I, i) => (
-              <a key={i} href="#" className="w-9 h-9 rounded-full glass grid place-items-center hover:text-saffron transition">
+            {[
+              { I: Twitter, label: "Twitter" },
+              { I: Github, label: "GitHub" },
+              { I: Linkedin, label: "LinkedIn" },
+              { I: Mail, label: "Email" },
+            ].map(({ I, label }) => (
+              <a key={label} href="#" aria-label={label} className="w-9 h-9 rounded-full glass grid place-items-center hover:text-saffron transition focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron">
                 <I className="w-4 h-4" />
               </a>
             ))}
@@ -37,10 +44,27 @@ export function Footer() {
             </ul>
           </div>
         ))}
+        <div>
+          <div className="font-semibold text-sm mb-4">Contact</div>
+          <ul className="space-y-2.5">
+            <li><a href="#" className="text-sm text-muted-foreground hover:text-saffron transition">Partnerships</a></li>
+            <li><a href="#" className="text-sm text-muted-foreground hover:text-saffron transition">Press</a></li>
+            <li>
+              <button onClick={() => setPrivacyOpen(true)} className="text-sm text-muted-foreground hover:text-saffron transition focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded">
+                Privacy & Data
+              </button>
+            </li>
+            <li><a href="mailto:hello@smartbharat.in" className="text-sm text-muted-foreground hover:text-saffron transition">hello@smartbharat.in</a></li>
+          </ul>
+        </div>
       </div>
-      <div className="max-w-7xl mx-auto pt-6 border-t border-border/60 text-xs text-muted-foreground text-center">
-        © 2026 Smart Bharat — Built for PromptWars x Global Prompt Challenge.
+      <div className="max-w-7xl mx-auto pt-6 border-t border-border/60 space-y-3 text-center">
+        <p className="text-xs text-muted-foreground max-w-3xl mx-auto italic">
+          Smart Bharat is a conceptual prototype built for the PromptWars x Global Prompt Challenge hackathon and is not an official Government of India service.
+        </p>
+        <p className="text-xs text-muted-foreground">© 2026 Smart Bharat — Built for PromptWars x Global Prompt Challenge.</p>
       </div>
+      <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </footer>
   );
 }
