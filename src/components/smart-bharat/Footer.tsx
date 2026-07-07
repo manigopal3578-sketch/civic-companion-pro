@@ -72,6 +72,7 @@ export function Footer() {
         <p className="text-xs text-muted-foreground">© 2026 Smart Bharat — Built for PromptWars x Global Prompt Challenge.</p>
       </div>
       <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <PrivacyPanel open={panelOpen} onClose={() => setPanelOpen(false)} />
     </footer>
   );
 }
