@@ -1,24 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/smart-bharat/Navbar";
+import { Hero } from "@/components/smart-bharat/Hero";
+import { Problem } from "@/components/smart-bharat/Problem";
+import { Demo } from "@/components/smart-bharat/Demo";
+import { Features } from "@/components/smart-bharat/Features";
+import { HowItWorks } from "@/components/smart-bharat/HowItWorks";
+import { Impact } from "@/components/smart-bharat/Impact";
+import { Testimonials } from "@/components/smart-bharat/Testimonials";
+import { Report } from "@/components/smart-bharat/Report";
+import { FinalCTA } from "@/components/smart-bharat/FinalCTA";
+import { Footer } from "@/components/smart-bharat/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="relative">
+      <Navbar />
+      <Hero />
+      <Problem />
+      <Demo />
+      <Features />
+      <HowItWorks />
+      <Impact />
+      <Testimonials />
+      <Report />
+      <FinalCTA />
+      <Footer />
+    </main>
   );
 }
