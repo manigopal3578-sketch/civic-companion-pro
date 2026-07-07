@@ -33,23 +33,24 @@
 
 :root {
   --radius: 1rem;
-  --background: oklch(0.17 0.02 250);
-  --foreground: oklch(0.97 0.01 160);
-  --card: oklch(0.21 0.025 250);
-  --card-foreground: oklch(0.97 0.01 160);
-  --primary: oklch(0.78 0.17 60);
-  --primary-foreground: oklch(0.15 0.02 250);
-  --secondary: oklch(0.42 0.06 210);
-  --secondary-foreground: oklch(0.97 0.01 160);
-  --muted: oklch(0.25 0.02 250);
-  --muted-foreground: oklch(0.72 0.03 220);
-  --accent: oklch(0.82 0.16 80);
-  --accent-foreground: oklch(0.15 0.02 250);
-  --saffron: oklch(0.78 0.17 60);
-  --amber-glow: oklch(0.86 0.17 85);
-  --teal-deep: oklch(0.42 0.06 210);
-  --border: oklch(0.3 0.02 250);
-  --ring: oklch(0.78 0.17 60);
+  /* Arctic Prestige palette */
+  --background: oklch(0.14 0.012 245);        /* Obsidian #0B0F14 */
+  --foreground: oklch(0.97 0.005 240);        /* Ice White #F5F8FA */
+  --card: oklch(0.26 0.028 250);              /* Arctic Navy #1E2A39 */
+  --card-foreground: oklch(0.97 0.005 240);
+  --primary: oklch(0.76 0.032 240);           /* Glacier Blue #9DB4C6 */
+  --primary-foreground: oklch(0.18 0.02 245); /* Arctic Navy for contrast */
+  --secondary: oklch(0.52 0.03 245);          /* Steel Blue #5C7386 */
+  --secondary-foreground: oklch(0.97 0.005 240);
+  --muted: oklch(0.26 0.028 250);
+  --muted-foreground: oklch(0.66 0.028 240);  /* Steel Blue lifted for contrast */
+  --accent: oklch(0.76 0.032 240);            /* Glacier Blue */
+  --accent-foreground: oklch(0.18 0.02 245);
+  --saffron: oklch(0.76 0.032 240);           /* remap → Glacier Blue */
+  --amber-glow: oklch(0.88 0.015 240);        /* remap → Silver Mist */
+  --teal-deep: oklch(0.52 0.03 245);          /* remap → Steel Blue */
+  --border: oklch(0.36 0.02 245);             /* silver mist on dark */
+  --ring: oklch(0.76 0.032 240);
 }
 
 @layer base {
@@ -59,11 +60,13 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(ellipse at top, oklch(0.22 0.04 250) 0%, oklch(0.13 0.02 250) 60%);
+      radial-gradient(ellipse at top, oklch(0.22 0.028 245) 0%, oklch(0.12 0.012 245) 60%);
     min-height: 100vh;
   }
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
   html { scroll-behavior: smooth; }
+  /* Cool blue-tinted overlay on background photos */
+  img { }
 }
 
 @utility grain-overlay {
@@ -83,12 +86,12 @@
   padding: 0.85rem 1.5rem;
   border-radius: 999px;
   transition: all 0.25s ease;
-  box-shadow: 0 10px 30px -10px oklch(0.78 0.17 60 / 0.5);
-  &:hover { transform: scale(1.03); box-shadow: 0 15px 40px -10px oklch(0.78 0.17 60 / 0.7); }
+  box-shadow: 0 10px 30px -10px oklch(0.76 0.032 240 / 0.55);
+  &:hover { transform: scale(1.03); box-shadow: 0 15px 40px -10px oklch(0.76 0.032 240 / 0.75); }
 }
 
 @utility btn-outline {
-  border: 1.5px solid oklch(0.97 0.01 160 / 0.3);
+  border: 1.5px solid oklch(0.97 0.005 240 / 0.35);
   color: var(--foreground);
   font-weight: 600;
   padding: 0.8rem 1.5rem;
@@ -99,9 +102,14 @@
 }
 
 @utility glass {
-  background: oklch(0.17 0.02 250 / 0.6);
+  background: oklch(0.14 0.012 245 / 0.6);
   backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid oklch(0.97 0.01 160 / 0.08);
+  border: 1px solid oklch(0.97 0.005 240 / 0.08);
+}
+
+/* Cool blue tint applied to hero / decorative background photos */
+@utility photo-cool {
+  filter: saturate(0.7) hue-rotate(180deg) brightness(0.85);
 }
 
 @keyframes spin-slow { to { transform: rotate(360deg); } }
@@ -113,7 +121,7 @@
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-marquee { animation: marquee 40s linear infinite; }
 .mesh-bg {
-  background: linear-gradient(120deg, oklch(0.22 0.05 40), oklch(0.18 0.04 210), oklch(0.2 0.06 250), oklch(0.25 0.08 60));
+  background: linear-gradient(120deg, oklch(0.22 0.03 245), oklch(0.18 0.02 240), oklch(0.26 0.035 250), oklch(0.32 0.03 240));
   background-size: 300% 300%;
   animation: mesh 18s ease infinite;
 }

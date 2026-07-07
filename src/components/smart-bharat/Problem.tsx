@@ -11,7 +11,7 @@ export function Problem() {
   return (
     <section id="problem" className="relative py-28 px-6 overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-10"
+        className="absolute inset-0 bg-cover bg-center opacity-10 photo-cool"
         style={{ backgroundImage: "url(https://images.pexels.com/photos/3184405/pexels-photo-3184405.jpeg)" }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />

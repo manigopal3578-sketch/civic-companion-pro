@@ -16,7 +16,7 @@ export function Hero() {
     <section id="hero" ref={ref} className="relative min-h-screen flex items-center overflow-hidden grain-overlay">
       <motion.div
         style={{ y: bgY, backgroundImage: "url(https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg)" }}
-        className="absolute inset-0 bg-cover bg-center scale-110"
+        className="absolute inset-0 bg-cover bg-center scale-110 photo-cool"
       />
       <div className="absolute inset-0 mesh-bg opacity-60 mix-blend-multiply" />
       <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
