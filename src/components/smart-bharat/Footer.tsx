@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Twitter, Github, Linkedin, Mail } from "lucide-react";
+import { Twitter, Github, Linkedin, Mail, Shield } from "lucide-react";
 import { ChakraIcon } from "./ChakraIcon";
 import { PrivacyModal } from "./PrivacyModal";
+import { PrivacyPanel } from "./PrivacyPanel";
 
 const cols = [
   { title: "Product", links: ["Companion", "Report Issue", "Schemes", "Roadmap"] },
@@ -10,6 +11,7 @@ const cols = [
 
 export function Footer() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   return (
     <footer className="border-t border-border/60 px-6 pt-16 pb-8">
       <div className="max-w-7xl mx-auto grid md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-10">
@@ -54,6 +56,11 @@ export function Footer() {
                 Privacy & Data
               </button>
             </li>
+            <li>
+              <button onClick={() => setPanelOpen(true)} className="text-sm text-muted-foreground hover:text-saffron transition focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded inline-flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" /> Manage my data
+              </button>
+            </li>
             <li><a href="mailto:hello@smartbharat.in" className="text-sm text-muted-foreground hover:text-saffron transition">hello@smartbharat.in</a></li>
           </ul>
         </div>
@@ -65,6 +72,7 @@ export function Footer() {
         <p className="text-xs text-muted-foreground">© 2026 Smart Bharat — Built for PromptWars x Global Prompt Challenge.</p>
       </div>
       <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <PrivacyPanel open={panelOpen} onClose={() => setPanelOpen(false)} />
     </footer>
   );
 }
