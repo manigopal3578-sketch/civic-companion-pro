@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Twitter, Github, Linkedin, Mail } from "lucide-react";
+import { Twitter, Github, Linkedin, Mail, Shield } from "lucide-react";
 import { ChakraIcon } from "./ChakraIcon";
 import { PrivacyModal } from "./PrivacyModal";
+import { PrivacyPanel } from "./PrivacyPanel";
 
 const cols = [
   { title: "Product", links: ["Companion", "Report Issue", "Schemes", "Roadmap"] },
@@ -10,6 +11,7 @@ const cols = [
 
 export function Footer() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   return (
     <footer className="border-t border-border/60 px-6 pt-16 pb-8">
       <div className="max-w-7xl mx-auto grid md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-10">
