@@ -56,6 +56,11 @@ export function Footer() {
                 Privacy & Data
               </button>
             </li>
+            <li>
+              <button onClick={() => setPanelOpen(true)} className="text-sm text-muted-foreground hover:text-saffron transition focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron rounded inline-flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" /> Manage my data
+              </button>
+            </li>
             <li><a href="mailto:hello@smartbharat.in" className="text-sm text-muted-foreground hover:text-saffron transition">hello@smartbharat.in</a></li>
           </ul>
         </div>
