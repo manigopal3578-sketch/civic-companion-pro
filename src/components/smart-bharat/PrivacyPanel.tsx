@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Trash2, X, Database, AlertTriangle } from "lucide-react";
+import { Shield, Trash2, X, Database, AlertTriangle, Download, Undo2 } from "lucide-react";
 
 type StoredEntry = {
   key: string;
