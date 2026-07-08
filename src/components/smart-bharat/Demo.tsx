@@ -155,27 +155,6 @@ export function Demo() {
               </div>
             </div>
 
-            <div className="pt-4 mt-4 border-t border-border">
-              <label htmlFor="gemini-key" className="text-xs uppercase tracking-wider text-muted-foreground px-2 mb-2 flex items-center gap-1.5">
-                <KeyRound className="w-3 h-3" aria-hidden="true" /> Gemini API Key
-              </label>
-              <div className="relative">
-                <input
-                  id="gemini-key"
-                  type={showKey ? "text" : "password"}
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Paste your key (optional)"
-                  className="w-full bg-muted/40 border border-border rounded-lg px-3 py-2 text-xs outline-none focus:border-saffron"
-                />
-                <button type="button" onClick={() => setShowKey(!showKey)} className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground hover:text-saffron">
-                  {showKey ? "hide" : "show"}
-                </button>
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-2 px-1 leading-snug">
-                Your API key stays in your browser and is never stored. Without a key, you'll see a scripted sample.
-              </p>
-            </div>
           </aside>
 
           <div className="glass rounded-3xl flex flex-col min-h-[560px] overflow-hidden">
