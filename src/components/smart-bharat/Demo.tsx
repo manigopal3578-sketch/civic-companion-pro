@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, FileText, Search, ClipboardList, Globe, CheckCircle2, Circle, Loader2, KeyRound, Sparkles, AlertCircle } from "lucide-react";
+import { Send, FileText, Search, ClipboardList, Globe, CheckCircle2, Circle, Loader2, Sparkles, AlertCircle } from "lucide-react";
 
 type Lang = "en" | "hi" | "te";
 const langNames: Record<Lang, string> = { en: "English", hi: "हिन्दी", te: "తెలుగు" };
