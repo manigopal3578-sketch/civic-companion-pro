@@ -278,8 +278,17 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
               )}
             </div>
 
-            <div className="px-6 py-4 border-t border-border text-xs text-muted-foreground">
-              Deletions are immediate and permanent on this device. No data leaves your browser.
+            <div className="px-6 py-4 border-t border-border text-xs text-muted-foreground flex items-center justify-between gap-3 flex-wrap">
+              <span>Deletions stay on this device. No data leaves your browser.</span>
+              {undoStack.length > 0 && (
+                <button
+                  onClick={undo}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-saffron/15 text-saffron border border-saffron/30 hover:bg-saffron/25 font-medium"
+                >
+                  <Undo2 className="w-3.5 h-3.5" /> Undo delete
+                  {undoStack.length > 1 ? ` (${undoStack.length})` : ""}
+                </button>
+              )}
             </div>
           </motion.div>
         </motion.div>
