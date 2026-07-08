@@ -192,30 +192,40 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
                     {entries.length} item{entries.length === 1 ? "" : "s"} · {formatBytes(totalSize)}
                   </span>
                 </div>
-                {entries.length > 0 &&
-                  (confirmAll ? (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setConfirmAll(false)}
-                        className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={deleteAll}
-                        className="text-sm px-3 py-1.5 rounded-lg bg-red-500/90 hover:bg-red-500 text-white font-medium inline-flex items-center gap-1.5"
-                      >
-                        <AlertTriangle className="w-4 h-4" /> Confirm delete all
-                      </button>
-                    </div>
-                  ) : (
+                <div className="flex gap-2 flex-wrap justify-end">
+                  {entries.length > 0 && (
                     <button
-                      onClick={() => setConfirmAll(true)}
-                      className="text-sm px-3 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1.5"
+                      onClick={exportJson}
+                      className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40 inline-flex items-center gap-1.5"
                     >
-                      <Trash2 className="w-4 h-4" /> Delete all
+                      <Download className="w-4 h-4" /> Export JSON
                     </button>
-                  ))}
+                  )}
+                  {entries.length > 0 &&
+                    (confirmAll ? (
+                      <>
+                        <button
+                          onClick={() => setConfirmAll(false)}
+                          className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={deleteAll}
+                          className="text-sm px-3 py-1.5 rounded-lg bg-red-500/90 hover:bg-red-500 text-white font-medium inline-flex items-center gap-1.5"
+                        >
+                          <AlertTriangle className="w-4 h-4" /> Confirm delete all
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmAll(true)}
+                        className="text-sm px-3 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1.5"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete all
+                      </button>
+                    ))}
+                </div>
               </div>
 
               {entries.length === 0 ? (
