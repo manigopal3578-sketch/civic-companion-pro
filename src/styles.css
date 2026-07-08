@@ -107,8 +107,14 @@
 
 /* Warm violet-to-orange tint applied to background photos */
 @utility photo-cool {
-  filter: saturate(1.05) contrast(1.02);
+  filter: saturate(1.05) contrast(1.02) brightness(0.85);
   position: relative;
+  &::after {
+    content: "";
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(135deg, oklch(0.35 0.16 293 / 0.45), oklch(0.72 0.19 50 / 0.28));
+    mix-blend-mode: overlay;
+  }
 }
 @utility photo-tint {
   &::after {
