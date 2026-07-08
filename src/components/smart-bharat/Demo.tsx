@@ -172,7 +172,7 @@ export function Demo() {
               {messages.length === 0 && demoStage === 0 && (
                 <div className="h-full grid place-items-center text-center">
                   <div>
-                    <p className="text-muted-foreground text-sm mb-4 max-w-xs">Type a question or pick a quick action. Add a Gemini key for live AI answers.</p>
+                    <p className="text-muted-foreground text-sm mb-4 max-w-xs">Type a question or pick a quick action to see the Companion in action.</p>
                     <button onClick={runScriptedDemo} className="btn-saffron">Ask the Companion</button>
                   </div>
                 </div>
