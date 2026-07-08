@@ -15,13 +15,13 @@ export function Hero() {
   return (
     <section id="hero" ref={ref} className="relative min-h-screen flex items-center overflow-hidden grain-overlay">
       <motion.div
-        style={{ y: bgY, backgroundImage: "url(https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg)" }}
+        style={{ y: bgY, backgroundImage: "url(https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg)", filter: "brightness(0.45) saturate(1.05)" }}
         className="absolute inset-0 bg-cover bg-center scale-110"
       />
-      {/* Warm violet-to-orange tint over the hero photo, kept subtle so image stays visible */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/35 via-transparent to-secondary/30 mix-blend-overlay" />
-      <div className="absolute inset-0 mesh-bg opacity-25 mix-blend-soft-light" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/20 to-background" />
+      {/* Warm violet-to-orange tint over the hero photo, subtle so image still reads */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/45 via-background/30 to-secondary/35 mix-blend-overlay" />
+      <div className="absolute inset-0 mesh-bg opacity-20 mix-blend-soft-light" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/55 to-background" />
 
       <ChakraIcon className="absolute right-[-80px] top-1/4 w-[380px] h-[380px] text-saffron/20 animate-spin-slow hidden md:block" />
       <div className="absolute left-8 bottom-32 w-24 h-24 text-amber-glow/30 animate-float hidden lg:block">
