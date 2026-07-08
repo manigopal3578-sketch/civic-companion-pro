@@ -46,8 +46,8 @@ export function Demo() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [apiKey, setApiKey] = useState("");
-  const [showKey, setShowKey] = useState(false);
+  // Optional Gemini key: read once from localStorage (advanced users) or Vite env; no UI exposed.
+  const apiKey = (typeof window !== "undefined" && localStorage.getItem("smart-bharat-gemini-key")) || (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) || "";
   const [demoStage, setDemoStage] = useState(0);
   const [progress, setProgress] = useState(0);
   const messagesRef = useRef<HTMLDivElement>(null);
