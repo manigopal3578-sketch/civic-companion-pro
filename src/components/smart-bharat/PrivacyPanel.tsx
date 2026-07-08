@@ -248,7 +248,7 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
                               {isOpen ? "Hide" : "View"}
                             </button>
                             <button
-                              onClick={() => deleteKey(e.key)}
+                              onClick={() => deleteKey(e.key, e.label)}
                               aria-label={`Delete ${e.label}`}
                               className="text-xs px-2.5 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1"
                             >
