@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, FileText, Search, ClipboardList, Globe, CheckCircle2, Circle, Loader2, KeyRound, Sparkles, AlertCircle } from "lucide-react";
+import { Send, FileText, Search, ClipboardList, Globe, CheckCircle2, Circle, Loader2, Sparkles, AlertCircle } from "lucide-react";
 
 type Lang = "en" | "hi" | "te";
 const langNames: Record<Lang, string> = { en: "English", hi: "हिन्दी", te: "తెలుగు" };
@@ -46,8 +46,8 @@ export function Demo() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [apiKey, setApiKey] = useState("");
-  const [showKey, setShowKey] = useState(false);
+  // Optional Gemini key: read once from localStorage (advanced users) or Vite env; no UI exposed.
+  const apiKey = (typeof window !== "undefined" && localStorage.getItem("smart-bharat-gemini-key")) || (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) || "";
   const [demoStage, setDemoStage] = useState(0);
   const [progress, setProgress] = useState(0);
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -155,27 +155,6 @@ export function Demo() {
               </div>
             </div>
 
-            <div className="pt-4 mt-4 border-t border-border">
-              <label htmlFor="gemini-key" className="text-xs uppercase tracking-wider text-muted-foreground px-2 mb-2 flex items-center gap-1.5">
-                <KeyRound className="w-3 h-3" aria-hidden="true" /> Gemini API Key
-              </label>
-              <div className="relative">
-                <input
-                  id="gemini-key"
-                  type={showKey ? "text" : "password"}
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Paste your key (optional)"
-                  className="w-full bg-muted/40 border border-border rounded-lg px-3 py-2 text-xs outline-none focus:border-saffron"
-                />
-                <button type="button" onClick={() => setShowKey(!showKey)} className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground hover:text-saffron">
-                  {showKey ? "hide" : "show"}
-                </button>
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-2 px-1 leading-snug">
-                Your API key stays in your browser and is never stored. Without a key, you'll see a scripted sample.
-              </p>
-            </div>
           </aside>
 
           <div className="glass rounded-3xl flex flex-col min-h-[560px] overflow-hidden">
@@ -193,7 +172,7 @@ export function Demo() {
               {messages.length === 0 && demoStage === 0 && (
                 <div className="h-full grid place-items-center text-center">
                   <div>
-                    <p className="text-muted-foreground text-sm mb-4 max-w-xs">Type a question or pick a quick action. Add a Gemini key for live AI answers.</p>
+                    <p className="text-muted-foreground text-sm mb-4 max-w-xs">Type a question or pick a quick action to see the Companion in action.</p>
                     <button onClick={runScriptedDemo} className="btn-saffron">Ask the Companion</button>
                   </div>
                 </div>

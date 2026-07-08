@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Trash2, X, Database, AlertTriangle } from "lucide-react";
+import { Shield, Trash2, X, Database, AlertTriangle, Download, Undo2 } from "lucide-react";
 
 type StoredEntry = {
   key: string;
@@ -68,6 +68,8 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
   const [entries, setEntries] = useState<StoredEntry[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [confirmAll, setConfirmAll] = useState(false);
+  const [undoStack, setUndoStack] = useState<Array<{ key: string; value: string; label: string }>>([]);
+  const undoTimer = useRef<number | null>(null);
 
   const refresh = () => setEntries(scanStorage());
 
@@ -76,20 +78,67 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
       refresh();
       setConfirmAll(false);
       setExpanded(null);
+      setUndoStack([]);
     }
   }, [open]);
 
   const totalSize = useMemo(() => entries.reduce((n, e) => n + e.size, 0), [entries]);
 
-  const deleteKey = (key: string) => {
+  const queueUndo = (items: Array<{ key: string; value: string; label: string }>) => {
+    if (undoTimer.current) window.clearTimeout(undoTimer.current);
+    setUndoStack(items);
+    undoTimer.current = window.setTimeout(() => setUndoStack([]), 8000);
+  };
+
+  const deleteKey = (key: string, label: string) => {
+    const value = localStorage.getItem(key);
+    if (value === null) return;
     localStorage.removeItem(key);
     refresh();
+    queueUndo([{ key, value, label }]);
   };
 
   const deleteAll = () => {
+    const snapshot = entries
+      .map((e) => ({ key: e.key, value: localStorage.getItem(e.key), label: e.label }))
+      .filter((x): x is { key: string; value: string; label: string } => x.value !== null);
     entries.forEach((e) => localStorage.removeItem(e.key));
     refresh();
     setConfirmAll(false);
+    queueUndo(snapshot);
+  };
+
+  const undo = () => {
+    undoStack.forEach((item) => localStorage.setItem(item.key, item.value));
+    setUndoStack([]);
+    if (undoTimer.current) window.clearTimeout(undoTimer.current);
+    refresh();
+  };
+
+  const exportJson = () => {
+    const payload: Record<string, unknown> = {
+      exportedAt: new Date().toISOString(),
+      app: "Smart Bharat",
+      data: {},
+    };
+    entries.forEach((e) => {
+      const raw = localStorage.getItem(e.key);
+      if (raw === null) return;
+      try {
+        (payload.data as Record<string, unknown>)[e.key] = JSON.parse(raw);
+      } catch {
+        (payload.data as Record<string, unknown>)[e.key] = raw;
+      }
+    });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `smart-bharat-data-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -143,30 +192,40 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
                     {entries.length} item{entries.length === 1 ? "" : "s"} · {formatBytes(totalSize)}
                   </span>
                 </div>
-                {entries.length > 0 &&
-                  (confirmAll ? (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setConfirmAll(false)}
-                        className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={deleteAll}
-                        className="text-sm px-3 py-1.5 rounded-lg bg-red-500/90 hover:bg-red-500 text-white font-medium inline-flex items-center gap-1.5"
-                      >
-                        <AlertTriangle className="w-4 h-4" /> Confirm delete all
-                      </button>
-                    </div>
-                  ) : (
+                <div className="flex gap-2 flex-wrap justify-end">
+                  {entries.length > 0 && (
                     <button
-                      onClick={() => setConfirmAll(true)}
-                      className="text-sm px-3 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1.5"
+                      onClick={exportJson}
+                      className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40 inline-flex items-center gap-1.5"
                     >
-                      <Trash2 className="w-4 h-4" /> Delete all
+                      <Download className="w-4 h-4" /> Export JSON
                     </button>
-                  ))}
+                  )}
+                  {entries.length > 0 &&
+                    (confirmAll ? (
+                      <>
+                        <button
+                          onClick={() => setConfirmAll(false)}
+                          className="text-sm px-3 py-1.5 rounded-lg border border-border hover:bg-muted/40"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={deleteAll}
+                          className="text-sm px-3 py-1.5 rounded-lg bg-red-500/90 hover:bg-red-500 text-white font-medium inline-flex items-center gap-1.5"
+                        >
+                          <AlertTriangle className="w-4 h-4" /> Confirm delete all
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmAll(true)}
+                        className="text-sm px-3 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1.5"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete all
+                      </button>
+                    ))}
+                </div>
               </div>
 
               {entries.length === 0 ? (
@@ -199,7 +258,7 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
                               {isOpen ? "Hide" : "View"}
                             </button>
                             <button
-                              onClick={() => deleteKey(e.key)}
+                              onClick={() => deleteKey(e.key, e.label)}
                               aria-label={`Delete ${e.label}`}
                               className="text-xs px-2.5 py-1.5 rounded-lg border border-red-500/40 text-red-400 hover:bg-red-500/10 inline-flex items-center gap-1"
                             >
@@ -219,8 +278,17 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
               )}
             </div>
 
-            <div className="px-6 py-4 border-t border-border text-xs text-muted-foreground">
-              Deletions are immediate and permanent on this device. No data leaves your browser.
+            <div className="px-6 py-4 border-t border-border text-xs text-muted-foreground flex items-center justify-between gap-3 flex-wrap">
+              <span>Deletions stay on this device. No data leaves your browser.</span>
+              {undoStack.length > 0 && (
+                <button
+                  onClick={undo}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-saffron/15 text-saffron border border-saffron/30 hover:bg-saffron/25 font-medium"
+                >
+                  <Undo2 className="w-3.5 h-3.5" /> Undo delete
+                  {undoStack.length > 1 ? ` (${undoStack.length})` : ""}
+                </button>
+              )}
             </div>
           </motion.div>
         </motion.div>
