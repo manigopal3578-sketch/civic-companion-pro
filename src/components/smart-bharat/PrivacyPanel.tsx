@@ -68,6 +68,8 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
   const [entries, setEntries] = useState<StoredEntry[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [confirmAll, setConfirmAll] = useState(false);
+  const [undoStack, setUndoStack] = useState<Array<{ key: string; value: string; label: string }>>([]);
+  const undoTimer = useRef<number | null>(null);
 
   const refresh = () => setEntries(scanStorage());
 
@@ -76,20 +78,67 @@ export function PrivacyPanel({ open, onClose }: { open: boolean; onClose: () => 
       refresh();
       setConfirmAll(false);
       setExpanded(null);
+      setUndoStack([]);
     }
   }, [open]);
 
   const totalSize = useMemo(() => entries.reduce((n, e) => n + e.size, 0), [entries]);
 
-  const deleteKey = (key: string) => {
+  const queueUndo = (items: Array<{ key: string; value: string; label: string }>) => {
+    if (undoTimer.current) window.clearTimeout(undoTimer.current);
+    setUndoStack(items);
+    undoTimer.current = window.setTimeout(() => setUndoStack([]), 8000);
+  };
+
+  const deleteKey = (key: string, label: string) => {
+    const value = localStorage.getItem(key);
+    if (value === null) return;
     localStorage.removeItem(key);
     refresh();
+    queueUndo([{ key, value, label }]);
   };
 
   const deleteAll = () => {
+    const snapshot = entries
+      .map((e) => ({ key: e.key, value: localStorage.getItem(e.key), label: e.label }))
+      .filter((x): x is { key: string; value: string; label: string } => x.value !== null);
     entries.forEach((e) => localStorage.removeItem(e.key));
     refresh();
     setConfirmAll(false);
+    queueUndo(snapshot);
+  };
+
+  const undo = () => {
+    undoStack.forEach((item) => localStorage.setItem(item.key, item.value));
+    setUndoStack([]);
+    if (undoTimer.current) window.clearTimeout(undoTimer.current);
+    refresh();
+  };
+
+  const exportJson = () => {
+    const payload: Record<string, unknown> = {
+      exportedAt: new Date().toISOString(),
+      app: "Smart Bharat",
+      data: {},
+    };
+    entries.forEach((e) => {
+      const raw = localStorage.getItem(e.key);
+      if (raw === null) return;
+      try {
+        (payload.data as Record<string, unknown>)[e.key] = JSON.parse(raw);
+      } catch {
+        (payload.data as Record<string, unknown>)[e.key] = raw;
+      }
+    });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `smart-bharat-data-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
